@@ -1,9 +1,8 @@
 /*
  * OUT DRIVE - Mega Drive Port
- * v0.2 - pista pseudo-3D + carro + controles
+ * v0.3 - pista pseudo-3D + carro + controles
  */
 #include <genesis.h>
-#include <stdio.h>
 
 /* ---------- cores VDP (3 bits por canal) ---------- */
 #define VPC(r,g,b) (u16)((((b)>>5)<<9)|(((g)>>5)<<5)|(((r)>>5)<<1))
@@ -125,7 +124,7 @@ static void drawRoad(s32 position, s16 curve, s16 playerX)
         acc += ddx >> 5;
     }
 
-    VDP_setTileMapXY(BG_B, screenBuf, 0, 0, 40, 28);
+    VDP_setTileMapDataRect(BG_B, screenBuf, 0, 0, 40, 28);
 }
 
 /* ---------- desenha o carro ---------- */
@@ -138,7 +137,7 @@ static void drawCar(s16 carX)
         carBuf[i]   = TA(PAL0, 160 + i);
         carBuf[4+i] = TA(PAL0, 164 + i);
     }
-    VDP_setTileMapXY(BG_A, carBuf, carX, 23, 4, 2);
+    VDP_setTileMapDataRect(BG_A, carBuf, carX, 23, 4, 2);
 }
 
 int main()
@@ -146,8 +145,8 @@ int main()
     VDP_setScreenWidth320();
     PAL_setColors(0,  (u16*)pal0, 16, DMA);
     PAL_setColors(16, (u16*)pal1, 16, DMA);
-    VDP_loadTileData((const u32 *)roadTiles, 128, 8, DMA);
-    VDP_loadTileData((const u32 *)carTiles, 160, 8, DMA);
+    VDP_loadTileData(roadTiles, 128, 8, DMA);
+    VDP_loadTileData(carTiles, 160, 8, DMA);
     JOY_init();
 
     s32 position = 0;
