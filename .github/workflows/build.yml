@@ -2,38 +2,19 @@ name: Build Mega Drive ROM
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
   build:
     name: Build SGDK ROM
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y make wget unzip openjdk-17-jre
-      
-      - name: Download SGDK
-        run: |
-          wget -q https://github.com/Stephane-D/SGDK/releases/download/v2.00/sgdk200.zip
-          unzip -q sgdk200.zip -d sgdk
-          chmod +x sgdk/bin/* 2>/dev/null || true
-      
-      - name: Build ROM
-        run: |
-          export GDK=$PWD/sgdk
-          export PATH=$GDK/bin:$PATH
-          make -f $GDK/makefile.gen
-        continue-on-error: false
-      
+
+      - name: Build ROM (Docker SGDK)
+        run: docker run --rm -v $PWD:/m68k -t registry.gitlab.com/doragasu/docker-sgdk:v2.00
+
       - name: Upload ROM artifact
         uses: actions/upload-artifact@v4
         with:
