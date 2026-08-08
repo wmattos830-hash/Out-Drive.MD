@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build ROM (Docker SGDK)
-        run: docker run --rm -v $PWD:/m68k -t registry.gitlab.com/doragasu/docker-sgdk:v2.00
+        run: docker run --rm -u $(id -u):$(id -g) -v $PWD:/m68k -t registry.gitlab.com/doragasu/docker-sgdk:v2.00
 
       - name: Upload ROM artifact
         uses: actions/upload-artifact@v4
