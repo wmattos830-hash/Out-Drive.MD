@@ -146,8 +146,8 @@ int main()
     VDP_setScreenWidth320();
     PAL_setColors(0,  (u16*)pal0, 16, DMA);
     PAL_setColors(16, (u16*)pal1, 16, DMA);
-    VDP_loadTileData(roadTiles, 128, 8, DMA);
-    VDP_loadTileData(carTiles, 160, 8, DMA);
+    VDP_loadTileData((const u32 *)roadTiles, 128, 8, DMA);
+    VDP_loadTileData((const u32 *)carTiles, 160, 8, DMA);
     JOY_init();
 
     s32 position = 0;
